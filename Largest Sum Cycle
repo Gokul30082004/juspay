@@ -1,0 +1,46 @@
+
+
+//User function Template for Java
+
+class Solution{
+    private Set<Integer> temp;
+    private long dfs(int i,List<ArrayList<Integer>> list,int start,int sum){
+        if(temp.contains(i)&& i==start){
+            return sum;
+        }
+        if(temp.contains(i)){ 
+            temp.clear();
+            return -1;
+        }
+        temp.add(i);
+        long tsum=-1;
+        for(int it:list.get(i)){
+            
+            tsum=Math.max(tsum,dfs(it,list,start,sum+i));
+        }
+        return tsum;
+        
+    }
+    public long largesSumCycle(int n, int arr[]){
+        List<ArrayList<Integer>> list=new ArrayList<>();
+        temp=new HashSet<>();
+        for(int i=0;i<arr.length;i++){
+            list.add(new ArrayList<Integer>());
+            if(arr[i]==-1)
+            continue;
+            list.get(i).add(arr[i]);
+        }
+        boolean[] vis=new boolean[n];
+        long sum=-1;
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                sum=Math.max(sum,dfs(i,list,i,0));
+                for(int j:temp){
+                    vis[j]=true;
+                }
+                temp.clear();
+            }
+        }
+        return sum;
+    }
+}
