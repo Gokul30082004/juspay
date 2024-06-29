@@ -1,0 +1,48 @@
+
+
+class Solution
+{
+    //Function to find distance of nearest 1 in the grid for each cell.
+    private class pair{
+        int i;
+        int j;
+        int dist;
+        pair(int i,int j,int dist){
+            this.i=i;
+            this.j=j;
+            this.dist=dist;
+        }
+    }
+    public int[][] nearest(int[][] grid)
+    {
+        boolean vis[][]=new boolean[grid.length][grid[0].length];
+        Queue<pair> q=new LinkedList<>();
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    q.add(new pair(i,j,0));
+                    vis[i][j]=true;
+                }
+            }
+        }
+        int dist[][]=new int[grid.length][grid[0].length];
+        int xaxis[]={-1,1,0,0};
+        int yaxis[]={0,0,1,-1};
+        while(!q.isEmpty()){
+            int i=q.peek().i;
+            int j=q.peek().j;
+            int dis=q.peek().dist;
+            dist[i][j]=dis;
+            q.remove();
+            for(int k=0;k<4;k++){
+                int tx=i-xaxis[k];
+                int ty=j-yaxis[k];
+                if(tx>=0 && ty>=0 && tx<grid.length && ty<grid[0].length && !vis[tx][ty]){
+                    vis[tx][ty]=true;
+                    q.add(new pair(tx,ty,dis+1));
+                }
+            }
+        }
+        return dist;
+    }
+}
