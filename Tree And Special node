@@ -1,0 +1,47 @@
+import java.util.*;
+ 
+class TestClass {
+    public static ArrayList<ArrayList<Integer>> list;
+    public static Set<Integer> set;
+    public static int count=0;
+    public static void main(String args[] ) throws Exception {
+        Scanner s=new Scanner(System.in);
+        int n=s.nextInt();
+        int arr[]=new int[n];
+        for(int i=0;i<n;i++){
+            arr[i]=s.nextInt();
+        }
+        Vector<Integer> []list = new Vector[n];
+        for(int i=0;i<n;i++){
+            list[i] = new Vector<Integer>();
+        }
+        for(int i=0;i<n-1;i++){
+            int u=s.nextInt()-1;
+            int v=s.nextInt()-1;
+            list[u].add(v);
+            list[v].add(u);
+        }
+        set=new HashSet<>();
+        boolean vis[]=new boolean[n];
+        // vis[0]=true;
+        // set.add(arr[0]);
+        dfs(list,0,arr,set);
+        System.out.println(count);
+        
+    }
+    public static void dfs(Vector<Integer> list[],int node,int[] arr,Set<Integer> set){
+        // int sum=1;
+        // vis[node]=true;
+        if(set.contains(arr[node]))
+            return;
+        ++count;
+        set.add(arr[node]);
+        for(int i:list[node]){
+            dfs(list,i,arr,set);
+        }
+        set.remove(arr[node]);
+        // return sum;
+ 
+    }
+}
+Language: Java 8
