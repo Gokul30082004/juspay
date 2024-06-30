@@ -1,0 +1,36 @@
+import java.util.*;
+class HelloWorld {
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        int n=s.nextInt();
+        Map<Integer,ArrayList<Integer>> map=new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(s.nextInt(),new ArrayList<Integer>());
+        }
+        int k=s.nextInt();
+        for(int i=0;i<k;i++){
+            map.get(s.nextInt()).add(s.nextInt());
+        }
+        int follower=s.nextInt();
+        int following=s.nextInt();
+        Queue<Integer> q=new LinkedList<>();
+        q.add(follower);
+        Set<Integer> set=new HashSet<>();
+        int cnt=-1;
+        while(!q.isEmpty()){
+            int temp=q.poll();
+            ++cnt;
+            if(temp==following){
+                System.out.println(cnt);
+                return;
+            }
+            set.add(temp);
+            for(int it:map.get(temp)){
+                if(!set.contains(it)){
+                    q.add(it);
+                }
+            }
+        }
+        System.out.println("-1");
+    }
+}
