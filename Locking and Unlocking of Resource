@@ -1,0 +1,79 @@
+import java.util.*;
+
+
+class HelloWorld {
+    public static class node{
+        List<node> childerns;
+        boolean islocable;
+        boolean islock;
+        node parent;
+        
+        node(){
+            islocable=true;
+            islock=false;
+        }
+        node(node parent){
+            this.parent=parent;
+            islocable=true;
+            islock=false;
+        }
+    }
+    public static boolean islock(node n){
+        return n.islock;
+    }
+    public static void lock(node islocking){
+        if(islocking.islocable==false)
+            return;
+        node temp=islocking;
+        while(temp!=null){
+            if(temp.islock==true) return;
+            temp=temp.parent;
+        }
+        temp=islocking;
+        temp.islock=true;
+        while(temp!=null){
+            temp.islocable=false;
+            temp=temp.parent;
+        }
+    }
+    public static void unlock(node n){
+        if(n.islock==false)return;
+        
+        n.islock=false;
+        while(n!=null){
+            n.islocable=true;
+            n=n.parent;
+        }
+    }
+    public static void main(String[] args) {
+        node root = new node();
+        node t1 = new node(root);
+        node t2 = new node(root);
+        node t3 = new node(root);
+        root.childerns = new ArrayList<>();
+        root.childerns.add(t1);
+        root.childerns.add(t2);
+        root.childerns.add(t3);
+        node t5 = new node(root.childerns.get(0));
+        root.childerns.get(0).childerns = new ArrayList<>();
+        root.childerns.get(0).childerns.add(t5);
+        node t4 = new node(root.childerns.get(1));
+        root.childerns.get(1).childerns = new ArrayList<>();
+        root.childerns.get(1).childerns.add(t4);
+        lock(t4);
+        System.out.println(
+            "t4 node is locked:"
+            + ((islock(t4) == true) ? "true" : "false"));
+ 
+        lock(t2);
+        System.out.println(
+            "t2 node is locked:"
+            + ((islock(t2) == true) ? "true" : "false"));
+        unlock(t4);=
+        lock(t2);
+        System.out.println(
+            "t2 node is locked:"
+            + ((islock(t2) == true) ? "true" : "false"));
+        
+    }
+}
