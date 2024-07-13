@@ -1,0 +1,32 @@
+import java.util.*;
+class HelloWorld {
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        int n=s.nextInt();
+        ArrayList<ArrayList<Integer>> list=new ArrayList<>();
+        for(int i=0;i<n;i++)
+            list.add(new ArrayList<>());
+        int m=s.nextInt();
+        for(int i=0;i<m;i++){
+            list.get(s.nextInt()).add(s.nextInt());
+        }
+        int src=s.nextInt();
+        int des=s.nextInt();
+        Queue<Integer> q=new LinkedList<>();
+        q.add(src);
+        boolean vis[]=new boolean[n];
+        while(!q.isEmpty()){
+            int node=q.poll();
+            vis[node]=true;
+            if(node==des){
+                System.out.println("True");
+                return;
+            }
+            for(int it:list.get(node)){
+                if(!vis[it])
+                    q.add(it);
+            }
+        }
+        System.out.println("False");
+    }
+}
