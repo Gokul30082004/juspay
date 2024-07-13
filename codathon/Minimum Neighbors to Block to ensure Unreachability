@@ -14,8 +14,8 @@ class HelloWorld {
             list.get(u).add(v);
             list.get(v).add(u);
         }
-        int src=s.nextInt();
         int dis=s.nextInt();
+        int src=s.nextInt();
         Queue<Integer> q=new LinkedList<>();
         q.add(src);
         int ans=0;
