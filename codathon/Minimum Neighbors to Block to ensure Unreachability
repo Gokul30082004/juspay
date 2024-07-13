@@ -9,7 +9,10 @@ class HelloWorld {
         
         int m=s.nextInt();
         for(int i=0;i<m;i++){
-            list.get(s.nextInt()).add(s.nextInt());
+            int u=s.nextInt();
+            int v=s.nextInt();
+            list.get(u).add(v);
+            list.get(v).add(u);
         }
         int src=s.nextInt();
         int dis=s.nextInt();
