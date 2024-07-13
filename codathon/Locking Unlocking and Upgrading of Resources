@@ -1,0 +1,173 @@
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+import java.util.*;
+
+class HelloWorld {
+    public static Map<String,node> map;
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        map=new HashMap<>();
+        int n=7;
+        int m=2;
+        ArrayList<String> list=new ArrayList<>();
+        list.add("india");
+        list.add("china");
+        list.add("pakisthan");
+        list.add("uk");
+        list.add("eran");
+        list.add("koera");
+        list.add("america");
+        node root=buildtree(list,n,m);
+        // printtree(root);
+        
+        int query=3;
+        // System.out.println(islock("india"));
+        // islock("india");
+        
+        if(lock(map.get("america"),2)){
+            map.get("america").uid=2;
+            map.get("america").islock=true;
+            System.out.println("america locked by 2");
+        }
+        else
+            System.out.println("Already Locked");
+        // System.out.println();
+        if(lock(map.get("uk"),3)){
+            map.get("uk").uid=3;
+            System.out.println("uk locked by 3");
+        }
+        else
+            System.out.println("Already Locked");
+        // System.out.println(islock("india"));
+        
+        
+        if(unlock(map.get("america"),2)){
+            System.out.println("america unlocked by 2");
+        }
+        else{
+            System.out.println("america is not unlocked");
+        }
+        if(upgrade(map.get("india"),3)){
+            System.out.println("India upgraded by 3");
+        }
+        else{
+            System.out.println("India is not upgraded");
+        }
+        
+    }
+    
+    public static boolean upgrade(node root,int uid){
+        if(root.parentuid.size()!=1 || root.parentuid.get(0)!=uid)
+            return false;
+        // System.out.println(root.parentuid.size());
+        while(root.parent!=null){
+            // System.out.println(root.name);
+            if(root.islock)
+                return false;
+            root=root.parent;
+        }
+        root.islock=true;
+        root.uid=uid;
+        return true;
+    }    
+    
+    public static boolean unlock(node root,int uid){
+        
+        // if(!root.islock)
+        //     return false;
+            
+        if(root.uid!=uid)
+            return false;
+            
+        Queue<node> q=new LinkedList<>();
+        while(root!=null){
+            root.islock=false;
+            // System.out.println(root.parentuid.get(0) +" " + uid);
+            root.parentuid.remove(Integer.valueOf(uid));
+            root=root.parent;
+        }
+        return true;
+    }
+    
+    public static boolean lock(node root,int uid){
+        if(root.islock && root.uid==uid)
+            return true;
+            
+        if(root.islock)
+            return false;
+        // System.out.println(root.name);
+        if(root.parent==null){
+            root.parentuid.add(uid);
+            // System.out.println(root.name);
+            return true;
+        }
+        
+        boolean val=lock(root.parent,uid);
+        if(val==true){
+            root.parentuid.add(uid);
+            // System.out.println(root.name);
+        }
+        return val;
+    }
+    
+    public static boolean islock(String s){
+        return map.get(s).uid!=-1;
+    }
+    public static void printtree(node root){
+        Queue<node> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            node temp=q.poll();
+            System.out.println(temp.name);
+            for(node getchild:temp.childern)
+                q.add(getchild);
+        }
+    }
+    public static node buildtree(List<String> list,int n,int m){
+        node root=new node(list.get(0),null);
+        map.put(list.get(0),root);
+        Queue<node> q=new LinkedList<>();
+        q.add(root);
+        int st=1;
+        while(!q.isEmpty()){
+            node temp=q.poll();
+            if(st>=list.size()) continue;
+            ArrayList<String> child=new ArrayList<>();
+            for(int i=st;i<st+m;i++)
+                child.add(list.get(i));
+            
+            temp.addlinks(child);
+            st+=m;
+            for(node getchild:temp.childern){
+                q.add(getchild);
+                map.put(getchild.name,getchild);
+            }
+        }
+        return root;
+    }
+    
+}
+class node{
+    String name;
+    List<node> childern;
+    node parent;
+    int uid;
+    List<Integer> parentuid;
+    boolean islock;
+    node(String name,node parent){
+        this.name=name;
+        this.parent=parent;
+        islock=false;
+        parentuid=new ArrayList<>();
+        childern=new ArrayList<>();
+        uid=-1;
+    }
+    void addlinks(List<String> s){
+        for(String st:s){
+            // System.out.print(st+" "+this.name+" ");
+            childern.add(new node(st,this));
+        }
+        // System.out.println();
+    }
+    
+}
