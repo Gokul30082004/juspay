@@ -1,0 +1,78 @@
+
+import java.util.*;
+
+class HelloWorld {
+    public static void main(String[] args) {
+        
+        Scanner s = new Scanner(System.in);
+        
+        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+        
+        int n = s.nextInt();
+        
+        for(int i = 0; i < n; i++){
+            list.add(new ArrayList<>());
+            
+            int node = s.nextInt();
+            
+            if(node != -1)
+                list.get(i).add(node);
+        }
+        
+        int node2 = s.nextInt();
+        int node1 = s.nextInt();
+        
+        Queue<Integer> node1_queue = new LinkedList<>();
+        
+        Queue<Integer> node2_queue = new LinkedList<>();
+        
+        boolean vis_node1[] = new boolean[n];
+        boolean vis_node2[] = new boolean[n];
+        
+        vis_node1[node1] = true;
+        vis_node2[node2] = true;
+        
+        node1_queue.add(node1);
+        node2_queue.add(node2);
+        
+        while(!node1_queue.isEmpty() && !node2_queue.isEmpty()){
+            
+            int curr_node1 = node1_queue.poll();
+            int curr_node2 = node2_queue.poll();
+            
+            System.out.println(curr_node1 + " " + curr_node2);
+            
+            
+            if(vis_node2[curr_node1]){
+                System.out.println(curr_node1);
+                return;
+            }
+            
+            if(vis_node1[curr_node2]){
+                System.out.println(curr_node2);
+                return;
+            }
+            
+            for(int child : list.get(curr_node1)){
+                if(!vis_node1[child]){
+                    
+                    vis_node1[child] = true;
+                    node1_queue.add(child);
+                }
+            }
+            
+            for(int child : list.get(curr_node2)){
+                
+                if(!vis_node2[child]){
+                    
+                    vis_node2[child] = true;
+                    node2_queue.add(child);
+                }
+            }
+        }
+        
+        System.out.println("-1");
+        return;
+        
+    }
+}
