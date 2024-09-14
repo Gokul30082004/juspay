@@ -1,0 +1,61 @@
+
+import java.util.*;
+
+class Main{
+    public static ArrayList<Integer> ans;
+    public static int dest;
+    public static int tot_weight;
+    public static ArrayList<ArrayList<Integer>> list;
+    
+    public static void find_shortestpath(int node, int weight, ArrayList<Integer> temp){
+        
+        if(node == dest && tot_weight > weight){
+            ans.clear();
+            
+            ans.addAll(temp);
+            
+            ans.add(dest);
+            System.out.println(ans.get(2));
+        }
+        
+        for(int child : list.get(node)){
+            
+            temp.add(node);
+            find_shortestpath(child, weight + 1, temp);
+            temp.remove(temp.size() - 1);
+            
+        }
+    }
+    
+    public static void main(String args[]){
+        
+        Scanner s = new Scanner(System.in);
+        
+        ans = new ArrayList<Integer>();
+        
+        int n = s.nextInt();
+        
+        int num_edges = s.nextInt();
+        
+        list = new ArrayList<>();
+        
+        for(int i = 0; i < n; i++)
+            list.add(new ArrayList<>());
+        
+        for(int i = 0; i < num_edges; i++){
+            
+            int x = s.nextInt();
+            int y = s.nextInt();
+            
+            list.get(x).add(y);
+        }
+        int src = s.nextInt();
+        dest = s.nextInt();
+        tot_weight = Integer.MAX_VALUE;
+        
+        find_shortestpath(src, 0, new ArrayList<>());
+        
+        for(int nodes : ans)
+            System.out.print(nodes + " ");
+    }
+}
