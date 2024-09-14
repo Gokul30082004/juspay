@@ -1,0 +1,57 @@
+
+import java.util.*;
+
+class Main{
+    public static int dest;
+    public static ArrayList<ArrayList<Integer>> list;
+    public static int ans;
+    
+    public static boolean dfs(int node){
+        
+        if(node == dest){
+            ++ans;
+            return true;
+        }
+        
+        for(int child : list.get(node)){
+            if(dfs(child)){
+                return true;
+            }
+        }
+        
+        return false;
+        
+    }
+    
+    public static void main(String args[]){
+        
+        Scanner s = new Scanner(System.in);
+        
+        int n = s.nextInt();
+        
+        list = new ArrayList<>();
+        ans = 0;
+        
+        for(int i = 0; i < n; i++)
+            list.add(new ArrayList<>());
+        
+        int num_edges = s.nextInt();
+        
+        for(int i = 0; i < num_edges; i++)
+            list.get(s.nextInt()).add(s.nextInt());
+        
+        int src = s.nextInt();
+        dest = s.nextInt();
+       
+        for(int child : list.get(src)){
+            if(child == dest)
+                ++ans;
+            else
+                dfs(child);
+        }
+        
+        System.out.println(ans);
+    }    
+    
+    
+}
