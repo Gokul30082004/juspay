@@ -1,0 +1,156 @@
+
+import java.util.*;
+
+class Main{
+    
+    public static void main(String args[]){
+        
+        Scanner s = new Scanner(System.in);
+        
+        
+        tree root = new tree();
+        
+        ArrayList<String> list = new ArrayList<>();
+        
+        list.add("india");
+        list.add("china");
+        list.add("pakisthan");
+        list.add("uk");
+        list.add("eran");
+        list.add("koera");
+        list.add("america");
+        
+        root.buildtree(list);
+        
+        
+        // System.out.println(root.islock("india"));
+        
+        System.out.println(root.lock("india"));
+        System.out.println(root.unlock("uk"));
+    }
+}
+
+
+class tree{
+    private Map<String, nary> map;
+    private nary root;
+    tree(){
+        map = new HashMap<>();
+    }
+    
+    public void buildtree(ArrayList<String> list){
+    
+        Queue<nary> q= new LinkedList<>();
+        
+        root = new nary(list.get(0));
+        int list_size = list.size();
+        int i = 1;
+        
+        q.add(root);
+        
+        map.put(list.get(0), root);
+        
+        while(i < list_size){
+            
+            nary par = q.poll();
+            
+            
+            if(i < list_size){
+                nary new_node = new nary(list.get(i), par);
+                
+                map.put(list.get(i), new_node);
+                ++i;
+                q.add(new_node);
+            }
+            if(i < list_size){
+                nary new_node = new nary(list.get(i), par);
+                
+                map.put(list.get(i), new_node);
+                ++i;
+                q.add(new_node);
+            }
+                        
+        }
+    }
+    
+    public boolean islock(String name){
+        
+        return map.get(name).islock;
+    }
+    
+    
+    public boolean lock(String name){
+        
+        nary node = map.get(name);
+        
+        if(node.islock)
+            return true;
+        
+        if(!node.islockable)
+            return false;
+            
+        if(lock_parents(node)){
+            node.islock = true;
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    private boolean lock_parents(nary parent){
+        
+        if(parent == null)
+            return true;
+            
+        if(parent.islock)
+            return false;
+        parent.islockable = false;
+        
+        if(!lock_parents(parent.parent)){
+            parent.islockable = true;
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
+    public boolean unlock(String name){
+        
+        nary node = map.get(name);
+        
+        if(!node.islock)
+            return false;
+        
+        while(node != null){
+            node.islockable = true;
+            node = node.parent;
+        }
+        
+        return true;
+    }
+}
+
+
+class nary{
+    
+    
+    String curr_node;
+    
+    boolean islockable = true;
+    boolean islock = false;
+    nary parent;
+    
+    nary(String curr_node, nary parent){
+        this.curr_node = curr_node;
+        this.parent = parent;
+    }
+    
+    nary(String curr_node){
+        this.curr_node = curr_node;
+        parent = null;
+    }
+    
+    
+    
+}
