@@ -1,0 +1,55 @@
+
+import java.util.*;
+
+class Main{
+
+    public static Map<Integer, ArrayList<Integer>> graph;
+    public static void main(String args[]){
+        
+        Scanner s = new Scanner(System.in);
+        
+        graph = new HashMap<>();
+        
+        int n = s.nextInt();
+        
+        for(int i = 0 ; i < n; i++){
+            graph.put(s.nextInt(), new ArrayList<>());
+        }
+        
+        int num_edges = s.nextInt();
+        
+        for(int i = 0; i < num_edges; i++){
+            graph.get(s.nextInt()).add(s.nextInt());
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        
+        int src = s.nextInt();
+        int dest = s.nextInt();
+        
+        q.add(src);
+        
+        
+        Set<Integer> vis = new HashSet<>();
+        
+        while(!q.isEmpty()){
+            
+            int node = q.poll();
+            
+            if(node == dest){
+                System.out.println("1");
+                return;
+            }
+            
+            vis.add(node);
+            
+            for(int child : graph.get(node)){
+                
+                if(!vis.contains(child))
+                    q.add(child);
+            }
+        }
+        
+        System.out.println("0");
+    }
+}
